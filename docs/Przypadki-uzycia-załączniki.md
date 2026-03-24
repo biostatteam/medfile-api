@@ -15,6 +15,7 @@ Przekazywane dane muszą być zakodowane Base64.
 - [Załączniki](#załączniki)
 - [Spis treści](#spis-treści)
   - [Dodawanie załącznika](#dodawanie-załącznika)
+  - [Odczytywanie załącznika](#odczytywanie-załącznika)
   - [Aktualizowanie załącznika](#aktualizowanie-załącznika)
   - [Zmiana poszczególnych pól załącznika](#zmiana-poszczególnych-pól-załącznika)
   - [Usuwanie załącznika](#usuwanie-załącznika)
@@ -88,9 +89,22 @@ Prefer: return=representation
 }
 ```
 
+## Odczytywanie załącznika
+
+1. Ustal UUID załącznika (FHIR DocumentReference)
+2. Ustaw nagłówek Prefer na `return=representation` aby otrzymać całą reprezentacje zasobu.
+
+Przykład żądania :
+```
+GET /fhir/DocumentReference/{id}
+Content-Type: application/fhir+xml;fhirVersion=5.0
+Accept: application/fhir+xml
+Prefer: return=representation
+```
+
 ## Aktualizowanie załącznika
 
-1. Ustal UUID załącznika (FHIR DocumentRefernce)
+1. Ustal UUID załącznika (FHIR DocumentReference)
 2. Ustal UUID pacjenta (FHIR Patient)
 3. Ustal UUID wizyty (FHIR Appointment)
 3. Ustal nazwę, rozszerzenie i rozmiar pliku
@@ -161,7 +175,7 @@ Prefer: return=representation
 
 ## Zmiana poszczególnych pól załącznika
 
-1. Ustal UUID załącznika (FHIR Patient)
+1. Ustal UUID załącznika (FHIR DocumentReference)
 2. Ustal nową wartość wybranego paraemtru
 
 Przykład żadania XML:
@@ -231,7 +245,7 @@ Prefer: return=representation
 
 ## Usuwanie załącznika
 
-1. Ustal UUID załącznika (FHIR Patient)
+1. Ustal UUID załącznika (FHIR DocumentReference)
 
 ```
 DELETE /fhir/DocumentReference/{id}
