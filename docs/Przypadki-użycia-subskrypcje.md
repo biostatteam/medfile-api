@@ -30,6 +30,7 @@ które spełnia kryteria filtrowania, spowoduje wysłanie powiadomienia za pomoc
 - [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji)
 - [Usuwanie subskrypcji](#usuwanie-subskrypcji)
 - [Odbieranie powiadomienia](#odbieranie-powiadomienia)
+- [Rodzaje obsługiwanych zdarzeń](#rodzaje-obsługiwanych-zdarzeń)
 
 # Przetwarzanie zdarzeń i wysyłanie powiadomień
 
@@ -507,4 +508,18 @@ Przykład odpowiedzi full-resource XML:
   <topic value="SubscriptionTopic/15d50e9e-fc23-4c4e-87ee-c31a3530f56b"/>
 </SubscriptionStatus>
 ```
-  
+
+# Rodzaje obsługiwanych zdarzeń
+
+W bieżącej wersji implementacji subskrypcje obejmują zdarzenia związane z wizytami (zasoby Encounter oraz Appointment). Klient może spodziewać się następujących typów zdarzeń:
+
+- **utworzenie wizyty** (`fhir.subscription.topic.encounter.insert`) — zdarzenie wyzwalane przy rejestracji nowej wizyty;
+- **aktualizacja wizyty** (`fhir.subscription.topic.encounter.update`) — zdarzenie wyzwalane przy zmianie danych wizyty; dostępny filtr pozwala zawęzić powiadomienia wyłącznie do zmian statusu wizyty;
+- **usunięcie wizyty** (`fhir.subscription.topic.encounter.delete`) — zdarzenie wyzwalane przy usunięciu wizyty;
+- **opłacenie wizyty** (`fhir.subscription.topic.encounter.paid`) — zdarzenie wyzwalane w momencie odnotowania płatności za wizytę (np. oznaczenie wizyty jako opłaconej w kalendarzu, płatność online, opłacenie faktury);
+- **potwierdzenie wizyty przez pacjenta** (`fhir.subscription.topic.encounter.confirmed`) — zdarzenie wyzwalane, gdy pacjent potwierdzi wizytę (np. przez e-mail, SMS lub portal pacjenta).
+
+Zdarzenia opłacenia i potwierdzenia wizyty powstają wewnątrz systemu Medfile i nie można ich wywołać bezpośrednio przez API FHIR.
+
+Lista obsługiwanych zdarzeń może być rozszerzana. Aktualną listę wraz z identyfikatorami UUID można zawsze pobrać operacją [Pobieranie listy obsługiwanych zdarzeń](#pobieranie-listy-obsługiwanych-zdarzeń).
+
