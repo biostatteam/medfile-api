@@ -110,7 +110,7 @@ Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do te
 
 W tym scenariuszu możliwe jest zautoryzowanie aplikacji klienckiej FHIR API na podstawie tokenu JWT. W tym celu należy umieścić docelową domenę Medfile FHIR API endpoint w segmencie `audience`. W przypadku środowiska UAT będzie to:
 
-`sub = login::<userUuid>::medfile-api.uat.rstat.pl`
+`sub = login::<userUuid>::<authDomain>`
 
 Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do API, który należy umieścić w poniższym nagłówku HTTP, w każdym żądaniu:
 
@@ -131,8 +131,8 @@ Poniżej zaprezentowana jest szybka lista kontrolna wymaganych kroków autoryzac
 1. Wygenerowałeś klucze RSA.
 2. Klucz publiczny jest wgrany w Medfile.
 3. Master Token jest podpisany prywatnym kluczem RS256.
-4. `aud` wskazuje na odpowiednią instancję AuthService np: (`auth-service.uat.rstat.pl/api/auth/v1/token`).
-5. `sub` odpowiada właściwemu scenariuszowi (`medfile2...` vs `medfile-api...`).
+4. `aud` wskazuje na odpowiednią instancję AuthService np: (`<authDomain>/api/auth/v1/token`).
+5. `sub` odpowiada właściwemu scenariuszowi.
 6. Otrzymany ChildToken został prawidłowo użyty (np: parametr query 'token' lub `Authorization` Header w przypadku FHIR API).
 
 ## Najczęstsze błędy
