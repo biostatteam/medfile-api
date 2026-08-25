@@ -32,7 +32,7 @@ W dalszej części instrukcji, poszczególne kroki procesu zostały szczegółow
 - Unikatowy identyfikator UUID konta, na które wgrywany będzie klucz publiczny (issuer) — widoczny w Medfile w linku do otwartego zasobu
 - Unikatowy identyfikator UUID użytkownika lub ID konta, które ma być zautoryzowane w systemie docelowym — widoczny w Medfile w linku do otwartego zasobu
 - para kluczy RSA256 (prywatny + publiczny),
-- możliwość wykonania żądania HTTP do serwera autoryzacji (np: `auth-service.uat.rstat.pl` w środowisku UAT).
+- możliwość wykonania żądania HTTP do serwera autoryzacji.
 
 ## Krok 1: Wygeneruj parę kluczy RS256
 
@@ -49,7 +49,7 @@ Uwaga: można użyć 4096 bitów.
 
 1. Zaloguj się do konta w aplikacji Medfile.
 2. Upewnij się, że usługa 'Własna autoryzacja' jest aktywna. Jeśli nie, aktywuj ją.
-3. Przejdź do konfiguracji usługi 'Własna autoryzacja' w Menu \> Moje Konto. (przykład linku w środowisku UAT `https://medfile2.uat.rstat.pl/authorization_jwt_manage`)
+3. Przejdź do konfiguracji usługi 'Własna autoryzacja' w Menu \> Moje Konto. (`/authorization_jwt_manage`)
 4. Wgraj plik w okienku wgrywania certyfikatu `public_key.pem`.
 
 Ten krok jest wymagany, aby system mógł zweryfikować podpis MasterToken JWT.
@@ -64,7 +64,7 @@ Zbudowany Master Token należy umieścić w nagłówku HTTP do Auth Service w na
 
 `GET https://{host}/api/auth/v1/token`
 
-w przypadku środowiska UAT będzie to: `GET https://auth-service.uat.rstat.pl/api/auth/v1/token`
+w przypadku środowiska UAT będzie to: `GET <authDomain>/api/auth/v1/token`
 
 ### Nagłówek MasterToken JWT
 
@@ -80,7 +80,7 @@ w przypadku środowiska UAT będzie to: `GET https://auth-service.uat.rstat.pl/a
 ```json
 {
   "iss": "<tu umieść UUID konta na które wgrany został certyfikat>",
-  "aud": "<endpoint do pobrania ChildToken, np: auth-service.uat.rstat.pl/api/auth/v1/token>",
+  "aud": "<endpoint do pobrania ChildToken, np: <authDomain>/api/auth/v1/token>",
   "iat": <timestamp utworzenia tokenu>,
   "exp": <timestamp ważności tokenu>,
   "sub": "<podmiot autoryzacji wg składni login::<userUuid>::<audience>, patrz scenariusze poniżej>"
@@ -100,13 +100,11 @@ Odpowiednie ustawienie elementu `sub` jest kluczowe dla rozróżnienia systemu d
 
 W tym scenariuszu możliwe jest zalogowanie użytkownika wyłącznie na podstawie tokenu JWT dołączonego do linku, z pominięciem okna logowania. W tym celu należy umieścić docelową domenę aplikacji Medfile w segmencie `audience`. W przypadku środowiska UAT i serwera numer 2 będzie to:
 
-`sub = login::<userUuid>::medfile2.uat.rstat.pl`
+`sub = login::<userUuid>::<applicationDomain>`
 
 Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do tej domeny aplikacji Medfile, który należy umieścić w linku w następujący sposób:
 
 `https://{domena}/login/jwt?token=<token>`
-
-Przykład w środowisku UAT: `https://medfile2.uat.rstat.pl/login/jwt?token=<token>`
 
 ### Scenariusz B: Uzyskiwanie dostępu do FHIR API
 
@@ -123,10 +121,6 @@ Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do AP
 Uzyskany ChildToken można wykorzystać do autoryzacji żądań testowych za pośrednictwem strony dokumentacji online SwaggerUI.
 
 Dokumentacja dostępna jest w domenie Medfile FHIR API endpoint, pod adresem: `http://{host}/fhirdoc`
-
-W środowisku UAT będzie to:
-
-`http://medfile-api.uat.rstat.pl/fhirdoc`
 
 Dostęp do strony dokumentacji zabezpieczony jest metodą HTTP Basic. W celu otwarcia strony należy podać następujące poświadczenia w okienku autoryzacji wyświetlonym przez przeglądarkę. Proszę przesłać wniosek na integracja@medfile.pl w celu uzyskania danych autoryzacyjnych.
 
