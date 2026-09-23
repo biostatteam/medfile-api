@@ -14,13 +14,16 @@ Zwróć uwagę, aby nazwa i ścieżka pliku zgadzały się z parametrem `PEM_FIL
 
 Zastąp wszystkie wystąpienia `{{UUID}}` w pliku .env identyfikatorem UUID swojego konta w aplikacji Medfile na środowisku testowym.
 
+Zastąp `{{authDomain}}` domeną Medfile Auth Service, a `{{apiDomain}}` domeną Medfile API (FHIR) właściwego środowiska.
+
 __Uwaga:__ ID konta/UUID konta głównego - to synonimy.
 
 ## 3. Uruchom aplikację
 
-Aby uruchomić aplikację, upewnij się, że posiadasz zainstalowane środowisko PHP (wersja 8.0+), a następnie wykonaj polecenie w konsoli z katalogu aplikacji:
+Aby uruchomić aplikację, upewnij się, że posiadasz zainstalowane środowisko PHP (wersja 8.2 - 8.4) z rozszerzeniami `curl`, `openssl` i `sodium` oraz Composer, a następnie wykonaj polecenia w konsoli z katalogu aplikacji:
 
 ```php
+composer install
 php index.php
 ```
 

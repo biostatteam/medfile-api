@@ -13,6 +13,7 @@
   - [Anulowanie wizyty](#anulowanie-wizyty)
   - [Zmiany danych wizyty](#zmiany-danych-wizyty)
   - [Zmiana usługi na wizycie](#zmiana-usługi-na-wizycie)
+  - [Etykiety (tagi) wizyty](#etykiety-tagi-wizyty)
   - [Wyszukiwanie wizyt](#wyszukiwanie-wizyt)
       - [Obsługiwane parametry wyszukiwania](#obsługiwane-parametry-wyszukiwania-1)
   - [Pobieranie danych wizyty](#pobieranie-danych-wizyty)
@@ -72,7 +73,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-      <value value="sylwester.senior@test.rstat.pl"/>
+      <value value="pacjent@example.com"/>
     <use value="home"/>
   </telecom>
   <gender value="male"/>
@@ -169,7 +170,7 @@ Prefer: return=representation
         },
         {
             "system": "email",
-            "value": "sylwester.senior@test.rstat.pl",
+            "value": "pacjent@example.com",
             "use": "home"
         }
     ],
@@ -296,7 +297,7 @@ Prefer: return=representation
     </part>
     <part>
       <name value="value"/>
-      <valueString value="nowy.email@test.rstat.pl"/>
+      <valueString value="nowy.email@example.com"/>
     </part>
   </parameter>
   <parameter>
@@ -431,7 +432,7 @@ Prefer: return=representation
 
 Przykład żądania PUT XML:
 ```
-PUT /fhir/Patient
+PUT /fhir/Patient/{id}
 Content-Type: application/fhir+xml;fhirVersion=5.0
 Accept: application/fhir+xml
 Prefer: return=representation
@@ -467,7 +468,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-    <value value="sylwester.senior@test.rstat.pl"/>
+    <value value="pacjent@example.com"/>
     <use value="home"/>
   </telecom>
   <gender value="male"/>
@@ -544,7 +545,9 @@ Operacja pozwala na wyszukiwanie pacjentów według parametrów.
 
 1. Określ parametry kwerendy (query).
 2. Umieść nagłówek HTTP Prefer z preferencją `representation`. Przykład: `Prefer: return=representation`.
-3. Skieruj żądanie metodą POST na zasób Appointment.
+3. Skieruj żądanie metodą POST na zasób Patient.
+
+Parametry wyszukiwania przekazywane są wyłącznie w kwerendzie (query) adresu URL. Wyszukiwanie metodą GET oraz przekazywanie parametrów w treści żądania (`application/x-www-form-urlencoded`) nie są obsługiwane.
 
 ```
 POST /fhir/Patient/_search?{query}
@@ -561,7 +564,8 @@ Poniższa tabela obejmuje aktualnie obsługiwane parametry wyszukiwania.
 | _count     | ilość wyników wyszukiwania na stronę                                                                                    | -           |
 | name       | imię pacjenta                                                                                                           | eq, ap      |
 | family     | nazwisko pacjenta                                                                                                       | eq, ap      |
-| identifier | identyfikator pacjenta, id lub system\|id, np: `urn:oid:2.16.840.1.113883.3.4424.1.1.616\|79011111663` dla numeru PESEL | -           |
+| identifier | identyfikator pacjenta, id lub system\|id, np: `urn:oid:2.16.840.1.113883.3.4424.1.1.616\|60032223600` dla numeru PESEL | -           |
+| phone | numer telefonu pacjenta (telecom z system=phone) | - |
 
 
 
@@ -593,12 +597,12 @@ Prefer: return=representation
 <Appointment xmlns="http://hl7.org/fhir">
   <serviceType>
     <reference>
-      <reference value="HealthcareService/7fe05049-8176-2437-86be-01f2f3c28404"/>
+      <reference value="HealthcareService/00000000-0000-4000-8000-000000000011"/>
     </reference>
   </serviceType>
   <serviceType>
     <reference>
-      <reference value="HealthcareService/5c61b668-80b9-7411-57c2-909b70956715"/>
+      <reference value="HealthcareService/00000000-0000-4000-8000-000000000012"/>
     </reference>
   </serviceType>
   <description value=""/>
@@ -606,12 +610,12 @@ Prefer: return=representation
   <end value=""/>
   <created value=""/>
   <subject>
-    <reference value="Patient/d28d4890-f63c-369d-362e-25dfb4fc8d79>"/>
+    <reference value="Patient/00000000-0000-4000-8000-000000000021"/>
     <type value="Patient"/>
   </subject>
   <participant>
     <actor>
-      <reference value="Practitioner/ee2ea499-5f6f-4e4d-8a9a-5f0fb1382c3b"/>
+      <reference value="Practitioner/00000000-0000-4000-8000-000000000001"/>
       <type value="Practitioner"/>
     </actor>
     <required value="true"/>
@@ -659,7 +663,7 @@ Prefer: return=representation
     "participant": [
         {
             "actor": {
-                "reference": "Practitioner\/ee2ea499-5f6f-4e4d-8a9a-5f0fb1382c3b",
+                "reference": "Practitioner\/00000000-0000-4000-8000-000000000001",
                 "type": "Practitioner"
             },
             "required": true
@@ -760,7 +764,7 @@ Prefer: return=representation
     </part>
     <part>
       <name value="value"/>
-      <valueId value="148d23f4-70d2-47d7-8e81-2b77d1db3aae"/>
+      <valueId value="00000000-0000-4000-8000-000000000002"/>
     </part>
   </parameter>
   <parameter>
@@ -868,7 +872,7 @@ Prefer: return=representation
         },
         {
           "name": "value",
-          "valueId": "148d23f4-70d2-47d7-8e81-2b77d1db3aae"
+          "valueId": "00000000-0000-4000-8000-000000000002"
         }
       ]
     },
@@ -922,6 +926,71 @@ Prefer: return=representation
 1. Wyszukaj wizytę lub użyj zapamiętanego UUID.
 2. Aktualizuj usługę w wizycie przez PATCH.
 
+## Etykiety (tagi) wizyty
+
+Etykiety wizyty to kody słownika `http://www.medfile.pl/fhir/ValueSet/entity-tag` (zasób ValueSet `entity-tag`), gdzie `code` jest identyfikatorem etykiety.
+Etykiety zarządzane są standardowymi operacjami FHIR `$meta`, `$meta-add` i `$meta-delete` ([specyfikacja FHIR](https://www.hl7.org/fhir/resource-operation-meta.html)).
+Etykiety przypisane do wizyty zwracane są również przy pobieraniu zasobu Appointment w polu `meta.tag`, wraz z nazwą etykiety w polu `display`.
+
+1. Wyszukaj wizytę lub użyj zapamiętanego UUID.
+2. Ustal identyfikator etykiety w zasobie ValueSet `entity-tag` (patrz [Słowniki](./Przypadki-użycia-słowniki.md#pobieranie-słownika-konta-valueset)).
+3. Pobierz aktualne etykiety wizyty metodą GET na operację `$meta`.
+4. Dodaj etykiety metodą POST na operację `$meta-add` lub usuń je metodą POST na operację `$meta-delete`.
+
+Operacje zwracają zasób Parameters z aktualną listą etykiet wizyty (`parameter[].valueMeta.tag`).
+
+Przykład pobrania etykiet:
+```
+GET /fhir/Appointment/{id}/$meta
+Accept: application/fhir+json
+```
+
+Przykład żądania JSON dodania etykiety:
+```
+POST /fhir/Appointment/{id}/$meta-add
+Content-Type: application/fhir+json;fhirVersion=5.0
+Accept: application/fhir+json
+```
+```json
+{
+    "resourceType": "Parameters",
+    "parameter": [
+        {
+            "name": "meta",
+            "valueMeta": {
+                "tag": [
+                    {
+                        "system": "http:\/\/www.medfile.pl\/fhir\/ValueSet\/entity-tag",
+                        "code": "{id etykiety}"
+                    }
+                ]
+            }
+        }
+    ]
+}
+```
+
+Przykład żądania XML usunięcia etykiety:
+```
+POST /fhir/Appointment/{id}/$meta-delete
+Content-Type: application/fhir+xml;fhirVersion=5.0
+Accept: application/fhir+xml
+```
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Parameters xmlns="http://hl7.org/fhir">
+  <parameter>
+    <name value="meta"/>
+    <valueMeta>
+      <tag>
+        <system value="http://www.medfile.pl/fhir/ValueSet/entity-tag"/>
+        <code value="{id etykiety}"/>
+      </tag>
+    </valueMeta>
+  </parameter>
+</Parameters>
+```
+
 ## Wyszukiwanie wizyt
 
 Operacja pozwala na wyszukiwanie wizyty według parametrów.
@@ -929,6 +998,8 @@ Operacja pozwala na wyszukiwanie wizyty według parametrów.
 1. Określ parametry kwerendy (query).
 2. Umieść nagłówek HTTP Prefer z preferencją `representation`. Przykład: `Prefer: return=representation`.
 3. Skieruj żądanie metodą POST na zasób Appointment.
+
+Parametry wyszukiwania przekazywane są wyłącznie w kwerendzie (query) adresu URL. Wyszukiwanie metodą GET oraz przekazywanie parametrów w treści żądania (`application/x-www-form-urlencoded`) nie są obsługiwane.
 
 ```
 POST /fhir/Appointment/_search?{query}

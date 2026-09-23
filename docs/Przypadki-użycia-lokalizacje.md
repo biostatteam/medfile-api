@@ -21,7 +21,7 @@ Może to być gabinet, placówka medyczna, lub organizacja nadrzędna.
 
 Operacja pozwala na pobranie szczegółów pojedynczej lokalizacji.
 
-1. Ustal UUID loaklizacji. W tym celu możesz wykonać operację [Wyszukiwanie lokalizacji](#wyszukiwanie-lokalizacji).
+1. Ustal UUID lokalizacji. W tym celu możesz wykonać operację [Wyszukiwanie lokalizacji](#wyszukiwanie-lokalizacji).
 
 ```
 GET /fhir/Location/{id}

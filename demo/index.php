@@ -43,9 +43,9 @@ if (!file_exists($pemFile)) {
 
 echo "Configuration loaded successfully from $envFile\n\n";
 
-echo 'Create Integrator token' . "\n";
+echo 'Create Master token' . "\n";
 
-$integratorToken = new Builder(new JoseEncoder(), ChainedFormatter::default())
+$masterToken = (new Builder(new JoseEncoder(), ChainedFormatter::withUnixTimestampDates()))
     ->issuedBy($config['ISSUER'])
     ->permittedFor($config['AUDIENCE'])
     ->issuedAt(new DateTimeImmutable())
@@ -54,12 +54,12 @@ $integratorToken = new Builder(new JoseEncoder(), ChainedFormatter::default())
     ->getToken(new Sha256(), InMemory::plainText(file_get_contents($pemFile)))
     ->toString();
 
-echo $integratorToken . "\n";
+echo $masterToken . "\n";
 
 
 echo "\n";
 
-echo 'Get Master token' . "\n";
+echo 'Get Child token' . "\n";
 
 $ch = curl_init();
 
@@ -70,7 +70,7 @@ curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
 $headers = [
     'Accept: */*',
-    'Authorization: Bearer ' . $integratorToken,
+    'Authorization: Bearer ' . $masterToken,
 ];
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -80,16 +80,16 @@ if (curl_errno($ch)) {
 }
 curl_close($ch);
 
-$masterTokenData = json_decode($response, true);
-$masterToken = $masterTokenData['access_token'] ?? ($masterTokenData ?? null);
+$childTokenData = json_decode($response, true);
+$childToken = $childTokenData['access_token'] ?? ($childTokenData ?? null);
 
-if (!$masterToken || is_array($masterToken)) {
-    echo "Could not get master token from response.\n";
+if (!$childToken || is_array($childToken)) {
+    echo "Could not get child token from response.\n";
     echo "Response: " . $response . "\n";
     exit(1);
 }
 
-echo $masterToken . "\n";
+echo $childToken . "\n";
 
 echo "\n";
 
@@ -100,11 +100,13 @@ $ch_practitioner = curl_init();
 curl_setopt($ch_practitioner, CURLOPT_URL, $config['FHIR_BASE_URL'] . '/Practitioner/_search?_page=1&_count=20');
 curl_setopt($ch_practitioner, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch_practitioner, CURLOPT_POST, 1);
+curl_setopt($ch_practitioner, CURLOPT_POSTFIELDS, '');
 
 
 $practitioner_headers = [
     'Accept: application/fhir+json',
-    'Authorization: Bearer ' . $masterToken,
+    'Content-Type: application/fhir+json',
+    'Authorization: Bearer ' . $childToken,
 ];
 curl_setopt($ch_practitioner, CURLOPT_HTTPHEADER, $practitioner_headers);
 
@@ -130,10 +132,12 @@ $ch_location = curl_init();
 curl_setopt($ch_location, CURLOPT_URL, $config['FHIR_BASE_URL'] . '/Location/_search?_page=1&_count=20');
 curl_setopt($ch_location, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch_location, CURLOPT_POST, 1);
+curl_setopt($ch_location, CURLOPT_POSTFIELDS, '');
 
 $location_headers = [
     'Accept: application/fhir+json',
-    'Authorization: Bearer ' . $masterToken,
+    'Content-Type: application/fhir+json',
+    'Authorization: Bearer ' . $childToken,
 ];
 curl_setopt($ch_location, CURLOPT_HTTPHEADER, $location_headers);
 
@@ -161,10 +165,12 @@ $ch_patient = curl_init();
 curl_setopt($ch_patient, CURLOPT_URL, $patient_search_url);
 curl_setopt($ch_patient, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch_patient, CURLOPT_POST, 1);
+curl_setopt($ch_patient, CURLOPT_POSTFIELDS, '');
 
 $patient_headers = [
     'Accept: application/fhir+json',
-    'Authorization: Bearer ' . $masterToken,
+    'Content-Type: application/fhir+json',
+    'Authorization: Bearer ' . $childToken,
 ];
 curl_setopt($ch_patient, CURLOPT_HTTPHEADER, $patient_headers);
 
@@ -233,7 +239,7 @@ if ($patient_http_code >= 400) {
         $create_patient_headers = [
             'Accept: application/fhir+json',
             'Content-Type: application/fhir+json',
-            'Authorization: Bearer ' . $masterToken,
+            'Authorization: Bearer ' . $childToken,
         ];
         curl_setopt($ch_create_patient, CURLOPT_HTTPHEADER, $create_patient_headers);
 
@@ -252,6 +258,7 @@ if ($patient_http_code >= 400) {
             curl_setopt($ch_patient_again, CURLOPT_URL, $patient_search_url);
             curl_setopt($ch_patient_again, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch_patient_again, CURLOPT_POST, 1);
+            curl_setopt($ch_patient_again, CURLOPT_POSTFIELDS, '');
             curl_setopt($ch_patient_again, CURLOPT_HTTPHEADER, $patient_headers);
 
             $patient_response_again = curl_exec($ch_patient_again);
@@ -282,6 +289,7 @@ $ch_patient_oid = curl_init();
 curl_setopt($ch_patient_oid, CURLOPT_URL, $patient_search_oid_url);
 curl_setopt($ch_patient_oid, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch_patient_oid, CURLOPT_POST, 1);
+curl_setopt($ch_patient_oid, CURLOPT_POSTFIELDS, '');
 curl_setopt($ch_patient_oid, CURLOPT_HTTPHEADER, $patient_headers);
 
 $patient_oid_response = curl_exec($ch_patient_oid);
@@ -306,6 +314,7 @@ $ch_patient_urn_oid = curl_init();
 curl_setopt($ch_patient_urn_oid, CURLOPT_URL, $patient_search_urn_oid_url);
 curl_setopt($ch_patient_urn_oid, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch_patient_urn_oid, CURLOPT_POST, 1);
+curl_setopt($ch_patient_urn_oid, CURLOPT_POSTFIELDS, '');
 curl_setopt($ch_patient_urn_oid, CURLOPT_HTTPHEADER, $patient_headers);
 
 $patient_urn_oid_response = curl_exec($ch_patient_urn_oid);

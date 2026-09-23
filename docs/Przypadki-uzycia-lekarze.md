@@ -9,6 +9,7 @@
 - [Lekarze](#lekarze)
 - [Spis treści](#spis-treści)
   - [Dodawanie lekarza](#dodawanie-lekarza)
+  - [Odczyt danych lekarza](#odczyt-danych-lekarza)
   - [Aktualizowanie danych lekarza](#aktualizowanie-danych-lekarza)
   - [Zmiana poszczególnych pól danych lekarza (FHIR Path Patch)](#zmiana-poszczególnych-pól-danych-lekarza-fhir-path-patch)
   - [Usuwanie lekarza](#usuwanie-lekarza)
@@ -87,7 +88,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-    <value value="sylwester.senior@test.rstat.pl"/>
+    <value value="lekarz.dom@example.com"/>
     <use value="home"/>
   </telecom>
   <telecom>
@@ -97,7 +98,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-    <value value="sylwester.senior@test.rstat.pl"/>
+    <value value="lekarz.praca@example.com"/>
     <use value="work"/>
   </telecom>
   <address>
@@ -113,7 +114,7 @@ Prefer: return=representation
   <qualification>
     <code>
       <coding>
-        <system value="urn:oid:2.16.840.1.113883.3.4424.2.7.biostat.17.1.11"/>
+        <system value="2.16.840.1.113883.3.4424.2.7.biostat.17.1.11"/>
         <code value="3"/>
       </coding>
     </code>
@@ -121,8 +122,8 @@ Prefer: return=representation
   <qualification>
     <code>
       <coding>
-        <system value="urn:oid:2.16.840.1.113883.3.4424.2.7.biostat.17.1.12"/>
-        <code value="0828c110ceb04ed78d529a347d64181a"/>
+        <system value="2.16.840.1.113883.3.4424.2.7.biostat.17.1.12"/>
+        <code value="0828c110-ceb0-4ed7-8d52-9a347d64181a"/>
       </coding>
     </code>
   </qualification>
@@ -206,7 +207,7 @@ Prefer: return=representation
         },
         {
             "system": "email",
-            "value": "sylwester.senior@test.rstat.pl",
+            "value": "lekarz.dom@example.com",
             "use": "home"
         },
         {
@@ -216,7 +217,7 @@ Prefer: return=representation
         },
         {
             "system": "email",
-            "value": "sylwester.senior@test.rstat.pl",
+            "value": "lekarz.praca@example.com",
             "use": "work"
         }
     ],
@@ -250,7 +251,7 @@ Prefer: return=representation
                 "coding": [
                     {
                         "system": "2.16.840.1.113883.3.4424.2.7.biostat.17.1.12",
-                        "code": "0828c110ceb04ed78d529a347d64181a"
+                        "code": "0828c110-ceb0-4ed7-8d52-9a347d64181a"
                     }
                 ]
             }
@@ -269,6 +270,17 @@ Prefer: return=representation
         }
     ]
 }
+```
+
+## Odczyt danych lekarza
+
+1. Użyj UUID lekarza dla identyfikacji docelowego zasobu.
+
+Przykład żądania XML:
+```
+GET /fhir/Practitioner/{id}
+Accept: application/fhir+xml
+Prefer: return=representation
 ```
 
 ## Aktualizowanie danych lekarza
@@ -338,7 +350,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-    <value value="sylwester.senior@test.rstat.pl"/>
+    <value value="lekarz.dom@example.com"/>
     <use value="home"/>
   </telecom>
   <telecom>
@@ -348,7 +360,7 @@ Prefer: return=representation
   </telecom>
   <telecom>
     <system value="email"/>
-    <value value="sylwester.senior@test.rstat.pl"/>
+    <value value="lekarz.praca@example.com"/>
     <use value="work"/>
   </telecom>
   <address>
@@ -373,7 +385,7 @@ Prefer: return=representation
     <code>
       <coding>
         <system value="2.16.840.1.113883.3.4424.2.7.biostat.17.1.12"/>
-        <code value="0828c110ceb04ed78d529a347d64181a"/>
+        <code value="0828c110-ceb0-4ed7-8d52-9a347d64181a"/>
       </coding>
     </code>
   </qualification>
@@ -389,7 +401,7 @@ Prefer: return=representation
 
 ```
 ```
-POST /fhir/Practitioner
+PUT /fhir/Practitioner/{id}
 Content-Type: application/fhir+json;fhirVersion=5.0
 Accept: application/fhir+json
 Prefer: return=representation
@@ -457,7 +469,7 @@ Prefer: return=representation
         },
         {
             "system": "email",
-            "value": "sylwester.senior@test.rstat.pl",
+            "value": "lekarz.dom@example.com",
             "use": "home"
         },
         {
@@ -467,7 +479,7 @@ Prefer: return=representation
         },
         {
             "system": "email",
-            "value": "sylwester.senior@test.rstat.pl",
+            "value": "lekarz.praca@example.com",
             "use": "work"
         }
     ],
@@ -501,7 +513,7 @@ Prefer: return=representation
                 "coding": [
                     {
                         "system": "2.16.840.1.113883.3.4424.2.7.biostat.17.1.12",
-                        "code": "0828c110ceb04ed78d529a347d64181a"
+                        "code": "0828c110-ceb0-4ed7-8d52-9a347d64181a"
                     }
                 ]
             }
@@ -787,7 +799,7 @@ Prefer: return=representation
     </part>
     <part>
       <name value="value"/>
-      <valueString value="2.16.840.1.113883.3.4424.2.7.biostat.17.1.12|0828c110ceb04ed78d529a347d64181a"/>
+      <valueString value="2.16.840.1.113883.3.4424.2.7.biostat.17.1.12|0828c110-ceb0-4ed7-8d52-9a347d64181a"/>
     </part>
   </parameter>
    <parameter>
@@ -1116,7 +1128,7 @@ Prefer: return=representation
                 },
                 {
                     "name": "value",
-                    "valueString": "2.16.840.1.113883.3.4424.2.7.biostat.17.1.12|0828c110ceb04ed78d529a347d64181a"
+                    "valueString": "2.16.840.1.113883.3.4424.2.7.biostat.17.1.12|0828c110-ceb0-4ed7-8d52-9a347d64181a"
                 }
             ]
         },
@@ -1195,8 +1207,8 @@ Użycie kilku parametrów jednocześnie interpretowane jest jako koniunkcja waru
 - pwz - identyfikator PWZ lekarza (komparatory eq, ap)
 - name - imię lekarza (komparatory eq, ap)
 - family - nazwisko lekarza (komparatory eq, ap)
-- _page - numer strony wyników wyszukiwania
-- _count - ilość elementów na stronie wyników wyszukiwania
+- _page - numer strony wyników wyszukiwania (domyślnie 1, maksymalnie 100)
+- _count - ilość elementów na stronie wyników wyszukiwania (domyślnie 5, maksymalnie 200)
 
 Przykład kwerendy z dokładnym dopasowaniem numeru PWZ (brak komparatora lub komparator eq): 
 ```

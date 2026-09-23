@@ -20,6 +20,7 @@
     - [Parametry stronicowania wyników](#parametry-stronicowania-wyników)
     - [Komparatory](#komparatory)
     - [Rezultaty wyszukiwania](#rezultaty-wyszukiwania)
+- [Kody odpowiedzi HTTP](#kody-odpowiedzi-http)
 
 # Nagłówki żądań HTTP
 
@@ -129,7 +130,7 @@ W pojedynczych scenariuszach użycia identyfikator może być liczbą naturalną
 
 Specyfikacja HL7 FHIR obejmuje zasób Parameter wykorzystywane m.in. do redagowania żądań selektywnej aktualizacji zasobów przez API.
 Medfile FHIR API określa parametry poszczególnych pól podlegających aktualizacji w danych zasobie.
-Kompletne przykłady struktur Parameters dla różnych zasobów dostępne są w ramach przykładów dokumentacji online Swagger UI ([http://medfile-api.uat.rstat.pl/fhirdoc](http://medfile-api.uat.rstat.pl/fhirdoc)).
+Kompletne przykłady struktur Parameters dla różnych zasobów dostępne są w ramach przykładów dokumentacji online Swagger UI ([https://medfile-api.uat.rstat.pl/fhirdoc](https://medfile-api.uat.rstat.pl/fhirdoc)).
 
 ## Użycie kodów i stałych ValueSet
 
@@ -150,8 +151,10 @@ POST /fhir/Practitioner/_search
 POST /fhir/Practitioner/_search?_page=1&_count=5&name=Test
 ```
 Zgodnie ze specyfikacją FHIR, parametry wyszukiwania przekazywane są jako kolejne segmenty query string.
+Parametry przekazane w treści żądania (`Content-Type: application/x-www-form-urlencoded`) nie są obecnie obsługiwane - nie są odczytywane ani łączone z query string, dlatego wszystkie parametry wyszukiwania należy umieścić w query string.
+Powtórzenia tego samego parametru (np. `date=ge2026-01-01&date=le2026-01-31`) są przekazywane w całości.
 Lista parametrów jest różna dla każdego zasobu.
-Aktualne Listy dostępne są przy opisach operacji dokumentacji SwaggerUI udostępnianej pod adresem URL endpointu API, w ścieżce `/fhirdoc`.
+Aktualne listy dostępne są przy opisach operacji dokumentacji SwaggerUI udostępnianej pod adresem URL endpointu API, w ścieżce `/fhirdoc`.
 
 ### Parametry stronicowania wyników
 Parametrami wspólnymi dla większości zasobów są `_page` i `_count`
@@ -160,7 +163,7 @@ określające żądaną stronę wyników i ilość wyników na stronie.
 ### Komparatory
 Dopasowania wartości parametrów mogą być realizowane z użyciem komparatorów zdefiniowanych w specyfikacji FHIR ([Prefixes](https://www.hl7.org/fhir/search.html#prefix)).
 Poszczególne zasoby mogą deklarować różną listę wspieranych komparatorów.
-Aktualne Listy dostępne są przy opisach operacji dokumentacji SwaggerUI udostępnianej pod adresem URL endpointu API, w ścieżce `/fhirdoc`.
+Aktualne listy dostępne są przy opisach operacji dokumentacji SwaggerUI udostępnianej pod adresem URL endpointu API, w ścieżce `/fhirdoc`.
 
 Pełna lista komparatorów FHIR i ich znaczenie:
 - eq - the resource value is equal to or fully contained by the parameter value
@@ -177,6 +180,13 @@ Pełna lista komparatorów FHIR i ich znaczenie:
 ### Rezultaty wyszukiwania
 Zgodnie ze specyfikacją FHIR, rezultaty wyszukiwania zwracane są jako zasób typu Bundle.
 Identyfikatory zasobów występujących w Bundle zwracane są zbiorczo w sekcji composition.
-Serializacja zwracancych zasobów przebiega taką samą metodą jak w przypadku operacji read, i obejmuje tę same pola i wartości.
+Serializacja zwracanych zasobów przebiega taką samą metodą jak w przypadku operacji read, i obejmuje te same pola i wartości.
 
+# Kody odpowiedzi HTTP
 
+- `200 OK` - operacja zakończona powodzeniem. Kod `200` zwracany jest również dla operacji create (API nie zwraca kodu `201 Created`).
+- `400 Bad Request` - błąd żądania lub błąd przetwarzania danych. Treść odpowiedzi ma typ `text/plain` i zawiera komunikat w formie `<komunikat> [Code: <kod>]` (nie jest to zasób OperationOutcome).
+- `401 Unauthorized` - brak, niepoprawny lub wygasły ChildToken. Treść odpowiedzi ma typ `application/json`, np: `{"message": "Authentication failed. Expired token"}`. W przypadku wygaśnięcia tokenu należy pobrać nowy ChildToken z Auth Service.
+- `429 Too Many Requests` - przekroczony limit liczby żądań.
+- `500 Internal Server Error` - nieoczekiwany błąd serwera.
+- `501 Not Implemented` - interakcja nie jest obsługiwana (m.in. operacje na poziomie systemu, np. `GET /fhir/metadata`, oraz niedostępne operacje zasobów CodeSystem i ValueSet).

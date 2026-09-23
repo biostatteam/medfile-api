@@ -1,6 +1,6 @@
 # Załączniki
 
-Zasób załacznika (DocumentReference) reprezentuje dowolny obiekt binarny, na przykład dokument PDF, notatkę kliniczną lub zdjęcie,
+Zasób załącznika (DocumentReference) reprezentuje dowolny obiekt binarny, na przykład dokument PDF, notatkę kliniczną lub zdjęcie,
 Oprócz sekwencji bajtów, załącznik ustanawia własny kontekst metadanych (tytuł, pacjent, wizyta.)
 i jest unikatowo identyfikowany przez UUID, analogicznie do pozostałych zasobów FHIR.
 Treść binarna jest przekazywana jako strumień danych (string) przypisany do pola Attachment.Data.
@@ -16,6 +16,7 @@ Przekazywane dane muszą być zakodowane Base64.
 - [Spis treści](#spis-treści)
   - [Dodawanie załącznika](#dodawanie-załącznika)
   - [Odczytywanie załącznika](#odczytywanie-załącznika)
+  - [Wyszukiwanie załączników](#wyszukiwanie-załączników)
   - [Aktualizowanie załącznika](#aktualizowanie-załącznika)
   - [Zmiana poszczególnych pól załącznika](#zmiana-poszczególnych-pól-załącznika)
   - [Usuwanie załącznika](#usuwanie-załącznika)
@@ -25,7 +26,7 @@ Przekazywane dane muszą być zakodowane Base64.
 1. Ustal UUID pacjenta (FHIR Patient)
 2. Ustal UUID wizyty (FHIR Appointment)
 3. Ustal nazwę, rozszerzenie i rozmiar pliku
-4. Przygotuj procedurę kodowania zawartośći pliku przed wysłaniem algorytmem Base 64.
+4. Przygotuj procedurę kodowania zawartości pliku przed wysłaniem algorytmem Base 64.
 
 Przykład żądania XML:
 ```
@@ -42,13 +43,13 @@ Prefer: return=representation
     <type value="Patient"/>
   </subject>
   <context>
-    <reference value="Encounter/{uuid}}"/>
+    <reference value="Encounter/{uuid}"/>
     <type value="Encounter"/>
   </context>
   <description value="description"/>
   <content>
     <attachment>
-      <data value="{base64 encoded file contents}}"/>
+      <data value="{base64 encoded file contents}"/>
       <size value="12345"/>
       <title value="testfile.ext"/>
     </attachment>
@@ -67,12 +68,12 @@ Prefer: return=representation
 {
     "resourceType": "DocumentReference",
     "subject": {
-      "reference": "Patient\/{uuid}}",
+      "reference": "Patient\/{uuid}",
       "type": "Patient"
     },
     "context": [
       {
-        "reference": "Encounter\/{uuid}}",
+        "reference": "Encounter\/{uuid}",
         "type": "Encounter"
       }
     ],
@@ -80,7 +81,7 @@ Prefer: return=representation
   "content": [
     {
       "attachment": {
-        "data": "{base64 encoded file contents}}",
+        "data": "{base64 encoded file contents}",
         "size": 12345,
         "title": "testfile.ext"
       }
@@ -102,13 +103,35 @@ Accept: application/fhir+xml
 Prefer: return=representation
 ```
 
+## Wyszukiwanie załączników
+
+1. Użyj filtrów wyszukiwania dołączając odpowiednie parametry kwerendy URL.
+
+Przykład żądania:
+```
+POST /fhir/DocumentReference/_search?{query}
+Content-Type: application/fhir+xml;fhirVersion=5.0
+Accept: application/fhir+xml
+```
+
+Poniższa tabela obejmuje aktualnie obsługiwane parametry wyszukiwania.
+
+| Nazwa | Opis | Komparatory |
+|---|---|---|
+| _page | numer strony wyników wyszukiwania | - |
+| _count | ilość wyników wyszukiwania na stronę | - |
+| original_filename | oryginalna nazwa pliku | eq, ap |
+| patient | UUID pacjenta (FHIR Patient) | - |
+| encounter | UUID wizyty (FHIR Encounter) | - |
+| context | referencja kontekstu w składni `{zasób}/{uuid}`; obsługiwane zasoby: Appointment, Encounter, Patient | - |
+
 ## Aktualizowanie załącznika
 
 1. Ustal UUID załącznika (FHIR DocumentReference)
 2. Ustal UUID pacjenta (FHIR Patient)
 3. Ustal UUID wizyty (FHIR Appointment)
 3. Ustal nazwę, rozszerzenie i rozmiar pliku
-4. Przygotuj procedurę kodowania zawartośći pliku przed wysłaniem algorytmem Base 64.
+4. Przygotuj procedurę kodowania zawartości pliku przed wysłaniem algorytmem Base 64.
 
 Przykład żądania XML:
 ```
@@ -120,19 +143,19 @@ Prefer: return=representation
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <DocumentReference xmlns="http://hl7.org/fhir">
-  <id value="{uuid}}"/>
+  <id value="{uuid}"/>
   <subject>
     <reference value="Patient/{uuid}"/>
     <type value="Patient"/>
   </subject>
   <context>
-    <reference value="Encounter/{uuid}}"/>
+    <reference value="Encounter/{uuid}"/>
     <type value="Encounter"/>
   </context>
   <description value="description"/>
   <content>
     <attachment>
-      <data value="{base64 encoded file contents}}"/>
+      <data value="{base64 encoded file contents}"/>
       <size value="12345"/>
       <title value="testfile.ext"/>
     </attachment>
@@ -143,20 +166,20 @@ Przykład żadania JSON:
 ```
 PUT /fhir/DocumentReference/{id}
 Content-Type: application/fhir+json;fhirVersion=5.0
-Accept: application/fhir+xml
+Accept: application/fhir+json
 Prefer: return=representation
 ```
 ```json
 {
-  "id":"d41fd573-7815-6b0d-3a34-e9849d96b70c",
+  "id":"{uuid}",
   "resourceType": "DocumentReference",
   "subject": {
-    "reference": "Patient\/{uuid}}",
+    "reference": "Patient\/{uuid}",
     "type": "Patient"
   },
   "context": [
     {
-      "reference": "Encounter\/{uuid}}",
+      "reference": "Encounter\/{uuid}",
       "type": "Encounter"
     }
   ],
@@ -164,7 +187,7 @@ Prefer: return=representation
   "content": [
     {
       "attachment": {
-        "data": "{base64 encoded file contents}}",
+        "data": "{base64 encoded file contents}",
         "size": 12345,
         "title": "testfile.ext"
       }
@@ -176,7 +199,7 @@ Prefer: return=representation
 ## Zmiana poszczególnych pól załącznika
 
 1. Ustal UUID załącznika (FHIR DocumentReference)
-2. Ustal nową wartość wybranego paraemtru
+2. Ustal nową wartość wybranego parametru
 
 Przykład żadania XML:
 ```

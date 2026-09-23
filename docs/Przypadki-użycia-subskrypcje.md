@@ -50,7 +50,7 @@ Każde żądanie powiadomienia jest kolejkowane i przetwarzane sekwencyjnie:
 - kolejka opróżniana jest metodą FIFO, z prędkością zależną od obciążenia systemu
 - klasa docelowa (handler) reaguje na żądanie powiadomienia
 - handler wysyła żądanie HTTP wg otrzymanych parametrów
-- przy występieniu błędu, zdarzenie wróci do kolejki a handler podejmie kolejną próbę wysyłki (maksymalnie 3)
+- przy wystąpieniu błędu, zdarzenie wróci do kolejki a handler podejmie kolejną próbę wysyłki (maksymalnie 3)
 
 # Pobieranie listy obsługiwanych zdarzeń
 
@@ -235,7 +235,7 @@ Przykład żądania JSON:
 
 # Aktualizowanie subskrypcji
 
-1. Ustal UUID uprzednio utworzonej subskrypcji. W tym celu możęsz wykonać operację [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji).
+1. Ustal UUID uprzednio utworzonej subskrypcji. W tym celu możesz wykonać operację [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji).
 2. Ustal UUID zdarzenia na które subskrypcja ma reagować. W tym celu możesz wykonać operację [Pobieranie listy obsługiwanych zdarzeń](#pobieranie-listy-obsługiwanych-zdarzeń).
 3. Ustal parametry żądania zwrotnego, które ma być wykonane po wystąpieniu zdarzenia - adres URL, metodę HTTP, itp.
 4. Ustal filtry zdarzenia, jeśli są dostępne dla danego zdarzenia. Filtry pozwalają na zawężenie warunków reakcji na zdarzenie.
@@ -279,7 +279,7 @@ Przykład żądania JSON:
 
 # Pobieranie szczegółów subskrypcji
 
-1. Ustal UUID uprzednio utworzonej subskrypcji. W tym celu możęsz wykonać operację [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji).
+1. Ustal UUID uprzednio utworzonej subskrypcji. W tym celu możesz wykonać operację [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji).
 
 ```
 GET /fhir/Subscription/{id}
@@ -306,7 +306,7 @@ Przykład odpowiedzi XML:
     <value value="PUT"/>
   </parameter>
   <contentType value="application/fhir+xml"/>
-  <content value=" full-resource"/>
+  <content value="full-resource"/>
 </Subscription>
 ```
 
@@ -330,7 +330,7 @@ Przykład odpowiedzi JSON:
     }
   ],
   "contentType": "application\/fhir+xml",
-  "content": " full-resource"
+  "content": "full-resource"
 }
 ```
 
@@ -344,6 +344,9 @@ POST /fhir/Subscription/_search
 Content-Type: application/fhir+xml;fhirVersion=5.0
 Accept: application/fhir+xml
 ```
+Obsługiwany parametr wyszukiwania (kwerenda URL):
+- name - nazwa subskrypcji
+
 Przykład odpowiedzi XML:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -389,7 +392,7 @@ Przykład odpowiedzi XML:
                     <value value="PUT"/>
                 </parameter>
                 <contentType value="application/fhir+xml"/>
-                <content value=" full-resource"/>
+                <content value="full-resource"/>
             </Subscription>
         </resource>
     </entry>
@@ -449,7 +452,7 @@ Przykład odpowiedzi JSON:
           }
         ],
         "contentType": "application\/fhir+xml",
-        "content": " full-resource"
+        "content": "full-resource"
       }
     }
   ]
@@ -458,7 +461,7 @@ Przykład odpowiedzi JSON:
 
 # Usuwanie subskrypcji
 
-Operacja usuwa wskazaną subskrypcję pobiera listę zarejestrowanych subskrypcji.
+Operacja usuwa wskazaną subskrypcję.
 
 1. Ustal UUID uprzednio utworzonej subskrypcji. W tym celu możesz wykonać operację [Wyszukiwanie subskrypcji](#wyszukiwanie-subskrypcji).
 
@@ -474,14 +477,14 @@ Operacja zwróci rezultat zależnie od preferencji zadeklarowanej w nagłówku.
 
 # Odbieranie powiadomienia
 
-Przy prawidłowo utworzonej i aktywnej subksrypcji, w reakcji na subskrybowane zdarzenie
+Przy prawidłowo utworzonej i aktywnej subskrypcji, w reakcji na subskrybowane zdarzenie
 system wykona żądanie HTTP na URL wskazany w subskrypcji.
 Wiadomość HTTP obejmować może różną zawartość w zależności od zadeklarowanych w subskrypcji ustawień.
 
 - w zależności od wartości elementu `Content`:
   - `full-resource` - zwrócony zostanie zasób SubscriptionStatus reprezentujący status powiadomienia.
     - w zależności w wartośći elementu `ContentType` zwrócony zostanie odpowiedni nagłówek HTTP Content-type
-  - `id-only` - zwrócona zostanie standardowa referencja do subskrybowanego zasobu w postaci `<resource/<uuid>`
+  - `id-only` - zwrócona zostanie standardowa referencja do subskrybowanego zasobu w postaci `<resource>/<uuid>`
     - zwrócony zostanie nagłówek HTTP Content-type o wartości text/plain
   - brak elementu
     - zwrócona zostanie pusta treść HTTP

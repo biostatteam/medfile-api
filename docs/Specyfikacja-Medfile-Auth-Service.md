@@ -30,7 +30,7 @@ W dalszej części instrukcji, poszczególne kroki procesu zostały szczegółow
 - konto w aplikacji Medfile (np: testowe w środowisku UAT),
 - aktywna usługa 'Własna autoryzacja' w Medfile
 - Unikatowy identyfikator UUID konta, na które wgrywany będzie klucz publiczny (issuer) — widoczny w Medfile w linku do otwartego zasobu
-- Unikatowy identyfikator UUID użytkownika lub ID konta, które ma być zautoryzowane w systemie docelowym — widoczny w Medfile w linku do otwartego zasobu
+- Unikatowy identyfikator UUID użytkownika lub UUID konta, które ma być zautoryzowane w systemie docelowym — widoczny w Medfile w linku do otwartego zasobu (FHIR API akceptuje wyłącznie identyfikatory w formacie UUID, identyfikatory liczbowe są odrzucane)
 - para kluczy RSA256 (prywatny + publiczny),
 - możliwość wykonania żądania HTTP do serwera autoryzacji.
 
@@ -77,7 +77,7 @@ w przypadku środowiska UAT będzie to: `GET <authDomain>/api/auth/v1/token`
 
 ### Payload MasterToken JWT
 
-```json
+```
 {
   "iss": "<tu umieść UUID konta na które wgrany został certyfikat>",
   "aud": "<endpoint do pobrania ChildToken, np: <authDomain>/api/auth/v1/token>",
@@ -110,7 +110,7 @@ Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do te
 
 W tym scenariuszu możliwe jest zautoryzowanie aplikacji klienckiej FHIR API na podstawie tokenu JWT. W tym celu należy umieścić docelową domenę Medfile FHIR API endpoint w segmencie `audience`. W przypadku środowiska UAT będzie to:
 
-`sub = login::<userUuid>::<authDomain>`
+`sub = login::<userUuid>::<apiDomain>`
 
 Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do API, który należy umieścić w poniższym nagłówku HTTP, w każdym żądaniu:
 
@@ -120,7 +120,7 @@ Po wykonaniu żądania do AuthService otrzymasz ChildToken dający dostęp do AP
 
 Uzyskany ChildToken można wykorzystać do autoryzacji żądań testowych za pośrednictwem strony dokumentacji online SwaggerUI.
 
-Dokumentacja dostępna jest w domenie Medfile FHIR API endpoint, pod adresem: `http://{host}/fhirdoc`
+Dokumentacja dostępna jest w domenie Medfile FHIR API endpoint, pod adresem: `https://{host}/fhirdoc`
 
 Dostęp do strony dokumentacji zabezpieczony jest metodą HTTP Basic. W celu otwarcia strony należy podać następujące poświadczenia w okienku autoryzacji wyświetlonym przez przeglądarkę. Proszę przesłać wniosek na integracja@medfile.pl w celu uzyskania danych autoryzacyjnych.
 
