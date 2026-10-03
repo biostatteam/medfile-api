@@ -2,7 +2,7 @@
 
 # Medfile API
 
-Wersja API: 1.1
+Wersja API: 1.2
 
 Kontakt: integracja@medfile.pl
 
@@ -20,6 +20,7 @@ Kontakt: integracja@medfile.pl
     5. [Subskrypcje](./docs/Przypadki-użycia-subskrypcje.md#subskrypcje)
     6. [Lokalizacje](./docs/Przypadki-użycia-lokalizacje.md#lokalizacje)
     7. [Słowniki (CodeSystem, ValueSet)](./docs/Przypadki-użycia-słowniki.md#słowniki)
+    8. [Usługi](./docs/Przypadki-użycia-usługi.md#usługi)
 4. [Faq](./docs/Faq.md)
 5. [Aplikacja demonstracyjna](./demo/README.md)
 6. [Historia zmian](./docs/Historia-zmian.md)

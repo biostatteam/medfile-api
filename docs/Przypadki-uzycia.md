@@ -579,7 +579,7 @@ Poniższa tabela obejmuje aktualnie obsługiwane parametry wyszukiwania.
 ## Dodawanie wizyty do kalendarza
 
 1. Utwórz lub wyszukaj pacjenta.
-2. Ustal UUID usługi, na którą pacjent zostanie umówiony przez Widżet API.
+2. Ustal UUID usługi, na którą pacjent zostanie umówiony, przez Widżet API lub [Wyszukiwanie usług](./Przypadki-użycia-usługi.md#wyszukiwanie-usług).
 3. Ustal wolny termin wizyty, w którym przyjmiesz pacjenta przez Widżet API.
 4. Ustal ID gabinetu, w którym wizyta ma się odbyć przez Widżet API. 
 5. Ustal UUID specjalisty, który ma wizytę zrealizować przez Widżet API.

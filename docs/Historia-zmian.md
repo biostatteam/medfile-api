@@ -6,8 +6,22 @@ Zmiany w Medfile FHIR API i w dokumentacji, od najnowszych.
 
 - [Historia zmian](#historia-zmian)
 - [Spis treści](#spis-treści)
+- [Wersja 1.2 (2026-10-03)](#wersja-12-2026-10-03)
 - [Wersja 1.1 (2026-09-23)](#wersja-11-2026-09-23)
 - [Wersja 1.0 (2026-03-22)](#wersja-10-2026-03-22)
+
+# Wersja 1.2 (2026-10-03)
+
+### Nowe funkcje
+
+- Usługi: dodawanie, odczyt, aktualizacja (PUT i PATCH), usuwanie i wyszukiwanie usług z cennika konta (zasób HealthcareService). Usługi Medfile są tylko do odczytu. Patrz [Usługi](./Przypadki-użycia-usługi.md#usługi).
+
+### Dokumentacja
+
+- Nowa strona [Usługi](./Przypadki-użycia-usługi.md#usługi): pola zasobu, rozszerzenia `healthcareservice-*`, usługi Medfile, parametry wyszukiwania.
+- Wizyty: odnośnik do wyszukiwania usług przy ustalaniu UUID usługi wizyty.
+- Słowniki: opis kategorii typu `services` jako kategorii usług.
+- Swagger UI: przykłady żądań HealthcareService zgodne z obsługiwanym formatem (rozszerzenia `healthcareservice-*`, kategoria w polu `category`, XML w składni FHIR, osobne przykłady aktualizacji z polem `id`) oraz opis parametru wyszukiwania `name`.
 
 # Wersja 1.1 (2026-09-23)
 

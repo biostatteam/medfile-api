@@ -38,7 +38,7 @@ Adres kanoniczny (`url`) słownika ma postać `http://www.medfile.pl/fhir/{zasó
 Ten sam adres podawany jest jako `system` pozycji słownika, np. w polu `meta.tag` wizyty.
 
 Każda kategoria ma dokładnie jeden typ ze słownika `entity-category-type`, podany w polu `designation.use`.
-Dla etykiet przeznaczone są kategorie typu `tags`.
+Dla etykiet przeznaczone są kategorie typu `tags`, a dla usług kategorie typu `services` (patrz [Usługi](./Przypadki-użycia-usługi.md#usługi)).
 
 # Pobieranie słownika systemowego (CodeSystem)
 
