@@ -6,9 +6,22 @@ Zmiany w Medfile FHIR API i w dokumentacji, od najnowszych.
 
 - [Historia zmian](#historia-zmian)
 - [Spis treści](#spis-treści)
+- [Wersja 1.3 (2026-10-26)](#wersja-13-2026-10-26)
 - [Wersja 1.2 (2026-10-03)](#wersja-12-2026-10-03)
 - [Wersja 1.1 (2026-09-23)](#wersja-11-2026-09-23)
 - [Wersja 1.0 (2026-03-22)](#wersja-10-2026-03-22)
+
+# Wersja 1.3 (2026-10-26)
+
+### Nowe funkcje
+
+- Recepty: odczyt i wyszukiwanie pozycji recept (zasób MedicationRequest) po pacjencie, wizycie i recepcie, wydruk recepty w formacie PDF (operacja `$print`) zgodny z tym, jak recepta została zamknięta - e-recepta z P1, recepta papierowa jako papierowa. Lek, dawkowanie i ubezpieczenie NFZ są częścią pozycji recepty. Patrz [Recepty](./Przypadki-użycia-recepty.md#recepty).
+- Subskrypcje: powiadomienie o zamknięciu recepty - jeden raz na receptę, przy pierwszym wydruku recepty papierowej albo przy wystawieniu e-recepty w P1 (zdarzenie `fhir.subscription.topic.medicationrequest.closed`). Droga zamknięcia (`paper` | `p1`) w nagłówku `X-Medfile-Prescription-Closure` i w rozszerzeniu zdarzenia; filtr `closure` zawęża subskrypcję do jednej drogi. Patrz [Powiadomienia o zamknięciu recepty](./Przypadki-użycia-recepty.md#powiadomienia-o-zamknięciu-recepty).
+
+### Dokumentacja
+
+- Nowa strona [Recepty](./Przypadki-użycia-recepty.md#recepty): identyfikator pozycji recepty, pola zasobu, rozszerzenia, lek, ubezpieczenie NFZ, dawkowanie, wyszukiwanie, wydruk i powiadomienia.
+- Subskrypcje: nowe zdarzenie zamknięcia recepty na liście obsługiwanych zdarzeń.
 
 # Wersja 1.2 (2026-10-03)
 

@@ -514,15 +514,16 @@ Przykład odpowiedzi full-resource XML:
 
 # Rodzaje obsługiwanych zdarzeń
 
-W bieżącej wersji implementacji subskrypcje obejmują zdarzenia związane z wizytami (zasoby Encounter oraz Appointment). Klient może spodziewać się następujących typów zdarzeń:
+W bieżącej wersji implementacji subskrypcje obejmują zdarzenia związane z wizytami (zasoby Encounter oraz Appointment) i receptami (zasób MedicationRequest). Klient może spodziewać się następujących typów zdarzeń:
 
 - **utworzenie wizyty** (`fhir.subscription.topic.encounter.insert`) — zdarzenie wyzwalane przy rejestracji nowej wizyty;
 - **aktualizacja wizyty** (`fhir.subscription.topic.encounter.update`) — zdarzenie wyzwalane przy zmianie danych wizyty; dostępny filtr pozwala zawęzić powiadomienia wyłącznie do zmian statusu wizyty;
 - **usunięcie wizyty** (`fhir.subscription.topic.encounter.delete`) — zdarzenie wyzwalane przy usunięciu wizyty;
 - **opłacenie wizyty** (`fhir.subscription.topic.encounter.paid`) — zdarzenie wyzwalane w momencie odnotowania płatności za wizytę (np. oznaczenie wizyty jako opłaconej w kalendarzu, płatność online, opłacenie faktury);
-- **potwierdzenie wizyty przez pacjenta** (`fhir.subscription.topic.encounter.confirmed`) — zdarzenie wyzwalane, gdy pacjent potwierdzi wizytę (np. przez e-mail, SMS lub portal pacjenta).
+- **potwierdzenie wizyty przez pacjenta** (`fhir.subscription.topic.encounter.confirmed`) — zdarzenie wyzwalane, gdy pacjent potwierdzi wizytę (np. przez e-mail, SMS lub portal pacjenta);
+- **zamknięcie recepty** (`fhir.subscription.topic.medicationrequest.closed`) — zdarzenie wyzwalane jeden raz na receptę: przy pierwszym wydruku recepty papierowej albo przy wystawieniu e-recepty w P1; droga zamknięcia (`paper` | `p1`) w nagłówku `X-Medfile-Prescription-Closure` i w rozszerzeniu zdarzenia, dostępny filtr `closure` zawęża powiadomienia do jednej drogi; powiadomienie obejmuje wszystkie leki recepty (patrz [Powiadomienia o zamknięciu recepty](./Przypadki-użycia-recepty.md#powiadomienia-o-zamknięciu-recepty)).
 
-Zdarzenia opłacenia i potwierdzenia wizyty powstają wewnątrz systemu Medfile i nie można ich wywołać bezpośrednio przez API FHIR.
+Zdarzenia opłacenia i potwierdzenia wizyty oraz zamknięcia recepty powstają wewnątrz systemu Medfile i nie można ich wywołać bezpośrednio przez API FHIR.
 
 Lista obsługiwanych zdarzeń może być rozszerzana. Aktualną listę wraz z identyfikatorami UUID można zawsze pobrać operacją [Pobieranie listy obsługiwanych zdarzeń](#pobieranie-listy-obsługiwanych-zdarzeń).
 
