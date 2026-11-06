@@ -2,7 +2,7 @@
 
 # Medfile API
 
-Wersja API: 1.3
+Wersja API: 1.4
 
 Kontakt: integracja@medfile.pl
 
@@ -22,6 +22,7 @@ Kontakt: integracja@medfile.pl
     7. [Słowniki (CodeSystem, ValueSet)](./docs/Przypadki-użycia-słowniki.md#słowniki)
     8. [Usługi](./docs/Przypadki-użycia-usługi.md#usługi)
     9. [Recepty](./docs/Przypadki-użycia-recepty.md#recepty)
+    10. [Wiadomości SMS](./docs/Przypadki-użycia-sms.md#wiadomości-sms)
 4. [Faq](./docs/Faq.md)
 5. [Aplikacja demonstracyjna](./demo/README.md)
 6. [Historia zmian](./docs/Historia-zmian.md)

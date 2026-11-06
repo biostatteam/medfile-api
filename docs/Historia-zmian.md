@@ -6,10 +6,21 @@ Zmiany w Medfile FHIR API i w dokumentacji, od najnowszych.
 
 - [Historia zmian](#historia-zmian)
 - [Spis treści](#spis-treści)
+- [Wersja 1.4 (2026-11-06)](#wersja-14-2026-11-06)
 - [Wersja 1.3 (2026-10-26)](#wersja-13-2026-10-26)
 - [Wersja 1.2 (2026-10-03)](#wersja-12-2026-10-03)
 - [Wersja 1.1 (2026-09-23)](#wersja-11-2026-09-23)
 - [Wersja 1.0 (2026-03-22)](#wersja-10-2026-03-22)
+
+# Wersja 1.4 (2026-11-06)
+
+### Nowe funkcje
+
+- Wiadomości SMS: odczyt i wyszukiwanie wiadomości SMS wysłanych do pacjenta i odebranych od pacjenta (zasób Communication) po pacjencie albo numerze telefonu oraz dacie wysłania. Numer telefonu dopasowywany jest niezależnie od zapisu (z prefiksem `+48`, `48` lub bez). Wiadomości z kodami logowania i hasłami do eksportu raportów nie są udostępniane. Patrz [Wiadomości SMS](./Przypadki-użycia-sms.md#wiadomości-sms).
+
+### Dokumentacja
+
+- Nowa strona [Wiadomości SMS](./Przypadki-użycia-sms.md#wiadomości-sms): pola zasobu, statusy, typy wiadomości, parametry wyszukiwania `patient`, `phone` i `sent`.
 
 # Wersja 1.3 (2026-10-26)
 
