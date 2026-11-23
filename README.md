@@ -2,7 +2,7 @@
 
 # Medfile API
 
-Wersja API: 1.5
+Wersja API: 1.6
 
 Kontakt: integracja@medfile.pl
 
