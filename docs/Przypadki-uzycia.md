@@ -7,6 +7,7 @@
   - [Usuwanie pacjenta](#usuwanie-pacjenta)
   - [Wyszukiwanie pacjentów](#wyszukiwanie-pacjentów)
       - [Obsługiwane parametry wyszukiwania](#obsługiwane-parametry-wyszukiwania)
+  - [Identyfikatory pacjenta](./Identyfikatory-pacjenta.md)
 - [Wizyty](#wizyty)
   - [Dodawanie wizyty do kalendarza](#dodawanie-wizyty-do-kalendarza)
     - [Dobre praktyki](#dobre-praktyki-1)
@@ -34,6 +35,8 @@
 1. Sprawdź, czy zasób już istnieje, np. szukając po PESEL.
 2. Jeżeli nie istnieje, utwórz zasób przez POST.
 3. Jeżeli istnieje, zaktualizuj go przez PATCH lub PUT.
+
+Obsługiwane identyfikatory pacjenta (PESEL, paszport, dokumenty cudzoziemców) i sposób budowania ich OID opisuje strona [Identyfikatory pacjenta](./Identyfikatory-pacjenta.md).
 
 Przykład żądania XML:
 ```
@@ -564,7 +567,7 @@ Poniższa tabela obejmuje aktualnie obsługiwane parametry wyszukiwania.
 | _count     | ilość wyników wyszukiwania na stronę                                                                                    | -           |
 | name       | imię pacjenta                                                                                                           | eq, ap      |
 | family     | nazwisko pacjenta                                                                                                       | eq, ap      |
-| identifier | identyfikator pacjenta, id lub system\|id, np: `urn:oid:2.16.840.1.113883.3.4424.1.1.616\|60032223600` dla numeru PESEL | -           |
+| identifier | identyfikator pacjenta, id lub system\|id, np: `urn:oid:2.16.840.1.113883.3.4424.1.1.616\|60032223600` dla numeru PESEL, inne OID: [Identyfikatory pacjenta](./Identyfikatory-pacjenta.md) | -           |
 | phone | numer telefonu pacjenta (telecom z system=phone) | - |
 
 

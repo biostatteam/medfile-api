@@ -2,7 +2,7 @@
 
 # Medfile API
 
-Wersja API: 1.4
+Wersja API: 1.5
 
 Kontakt: integracja@medfile.pl
 
@@ -14,6 +14,7 @@ Kontakt: integracja@medfile.pl
 2. [Specyfikacja protokołu](./docs/Specyfikacja-protokolu.md)
 3. Zasoby
     1. [Pacjenci](./docs/Przypadki-uzycia.md#pacjenci)
+        1. [Identyfikatory pacjenta](./docs/Identyfikatory-pacjenta.md)
     2. [Wizyty](./docs/Przypadki-uzycia.md#wizyty)
     3. [Lekarze](./docs/Przypadki-uzycia-lekarze.md#lekarze)
     4. [Załączniki](./docs/Przypadki-uzycia-załączniki.md#załączniki)
